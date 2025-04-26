@@ -1,0 +1,205 @@
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            width: 50vw;
+            height: 50vw;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #56aacb;
+        }
+        .form-container {
+            margin-bottom: 30px;
+        }
+        .form-container input,
+        .form-container select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        .form-container button {
+            padding: 10px;
+            background-color: #2d4ded;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background-color: #2d4ded;
+        }
+        .department-list {
+            overflow-x: auto;
+        }
+        #departmentTable {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        #departmentTable th,
+        #departmentTable td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        #departmentTable th {
+            background-color: #2d4ded;
+            color: white;
+        }
+        #departmentTable tr:hover {
+            background-color: #f1f1f1;
+        }
+        button.delete-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        button.delete-btn:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Deparment Book</h1>
+        <div class="form-container">
+            <form id="departmentForm">
+                <input type="text" id="id" placeholder="Id" required>
+                <input type="text" id="name" placeholder="Name" required>
+                <input type="text" id="employees" placeholder="Employees" required>
+                <input type="text" id="job" placeholder="Job" required>
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="text" id="phone" placeholder="Phone" required>
+                <select id="label">
+                    <option value="Marketing">Marketing</option>
+                    <option value="Sales">Sales</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Engineering">Engineering</option>
+                    <option value="Operations">Operations</option>
+                    <option value="Shipments">Shipments</option>
+                    <option value="Supplier">Supplier</option>
+                    <option value="QualityAssurance">Quality Assurance</option>
+                    <option value="CustomerService">Customer Service</option>
+                    <option value="HumanResources">Human Resources</option>
+                </select>
+                <button type="submit">Add Employee</button>
+            </form>
+        </div>
+        <div class="department-list"></div>
+            <h2>Deparments</h2>
+            <table id="departmentTable">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Employees</th>
+                        <th>Job</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Label</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="departmentBody">
+                </tbody>
+        </table>
+    </div>
+    <script>
+        var Label;
+        (function (Label) {
+            Label["Marketing"] = "Marketing";
+            Label["Sales"] = "Sales";
+            Label["Finance"] = "Finance";
+            Label["Engineering"] = "Engineering";
+            Label["Operations"] = "Operations";
+            Label["Shipments"] = "Shipments";
+            Label["Supplier"] = "Supplier";
+            Label["QualityAssurance"] = "Quality Assurance";
+            Label["CustomerService"] = "Customer Service";
+            Label["HumanResources"] = "Human Resources";
+        })(Label || (Label = {}));
+        var departments = [];
+        var form = document.getElementById("departmentForm");
+        var table = document.getElementById("departmentTable");
+        function addDepartment(id, name, employees, job, email, phone, label) {
+            if (label === void 0) { label = Label.Marketing; }
+            var department = {
+                id: id,
+                name: name,
+                employees: employees,
+                job: job,
+                email: email,
+                phone: phone,
+                label: label,
+            };
+            departments.push(department);
+            return department;
+        }
+        function remove(id) {
+            var removeToDepartment =  deparments.find(function (department) 
+                { return department.id === id; });
+            if (removeToDepartment) {
+                departments = departments.filter(function (department) 
+                   { return department.id!== removeToDepartment.id; });
+                return true;
+            }
+            return false;
+        }
+        function render(){
+            var tbody = table.querySelector("tbody");
+            if (tbody) {
+                tbody.innerHTML = "";
+                departments.forEach(function (department) {
+                    var tr = document.createElement("tr");
+                    tr.innerHTML = "<td>" + department.id + "</td>" +
+                        "<td>" + department.name + "</td>" +
+                        "<td>" + department.employees + "</td>" +
+                        "<td>" + department.job + "</td>" +
+                        "<td>" + department.email + "</td>" +
+                        "<td>" + department.phone + "</td>" +
+                        "<td>" + department.label + "</td>" +
+                        "<td><button class='delete-btn' onclick='removeDepartment(" + department.id + ")'>Delete</button></td>";
+                     tbody.appendChild(tr);
+                });
+            }
+        }
+        function deleteDepartment(id) {
+            var success = remove(id);
+            if (success) {
+                render();
+            }
+        }
+        form === null || form === void 0 ? void 0  : form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            var id = document.getElementById("id").value;
+            var name = document.getElementById("name").value;
+            var employees = document.getElementById("employees").value;
+            var job = document.getElementById("job").value;
+            var email = document.getElementById("email").value;
+            var phone = document.getElementById("phone").value;
+            var label = document.getElementById("label").value;
+            addDepartment(id, name, employees, job, email, phone, label);
+            render();
+            form.reset();
+        });
+        render();
+    </script>
+</body>
+</html>

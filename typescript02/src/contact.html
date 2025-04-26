@@ -1,0 +1,178 @@
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            width: 50vw;
+            height: 50vw;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #56aacb;
+        }
+        .form-container {
+            margin-bottom: 30px;
+        }
+        .form-container input,
+        .form-container select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        .form-container button {
+            padding: 10px;
+            background-color: #2d4ded;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background-color: #2d4ded;
+        }
+        .contact-list {
+            overflow-x: auto;
+        }
+        #contactTable {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        #contactTable th,
+        #contactTable td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        #contactTable th {
+            background-color: #2d4ded;
+            color: white;
+        }
+        #contactTable tr:hover {
+            background-color: #f1f1f1;
+        }
+        button.delete-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        button.delete-btn:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Contact Book</h1>
+        <div class="form-container">
+            <h2>Add Contact</h2>
+            <form id="contactForm">
+                <input type="text" id="name" placeholder="Name" required />
+                <input type="text" id="phone" placeholder="Phone" required />
+                <input type="email" id="email" placeholder="Email" required />
+                <select id="label">
+                    <option value="Family">Family</option>
+                    <option value="Friend">Friend</option>
+                    <option value="Business">Business</option>
+                    <option value="Work">Work</option>
+                </select>
+                <button type="submit">Add Contact</button>
+            </form>
+        </div>
+        <div class="contact-list">
+            <h2>Contacts</h2>
+            <table id="contactTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Label</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        var Label;
+        (function (Label) {
+            Label["Family"] = "Family";
+            Label["Friend"] = "Friend";
+            Label["Business"] = "Business";
+            Label["Work"] = "Work";
+        })(Label || (Label = {}));
+        var contacts = [];
+        var form = document.getElementById("contactForm");
+        var table = document.getElementById("contactTable");
+        function addContact(name, phone, email, label) {
+            if (label === void 0) { label = Label.Friend; }
+            var contact = {
+                id: contacts.length + 1,
+                name: name,
+                phone: phone,
+                email: email,
+                label: label,
+            };
+            contacts.push(contact);
+            return contact;
+        }
+        function remove(contactId) {
+            var contactToRemove = contacts.find(function (contact)
+               { return contact.id === contactId; });
+            if (contactToRemove) {
+                contacts = contacts.filter(function (contact) 
+                    { return contact.id !== contactToRemove.id; });
+                return true;
+            }
+            return false;
+        }
+        function render() {
+            var tbody = table.querySelector("tbody");
+            if (tbody) {
+                tbody.innerHTML = "";
+                contacts.forEach(function (contact) {
+                    var tr = document.createElement("tr");
+                    tr.innerHTML = "\n<td>".concat(contact.name, "</td>\n<td>").concat(contact.phone, "</td>\n<td>").concat(contact.email, "</td>\n <td>").concat(contact.label, "</td>\n  <td><button class=\"delete-btn\" onclick=\"deleteContact(").concat(contact.id, ")\">Delete</button></td>\n");
+                    tbody.appendChild(tr);
+                });
+            }
+        }
+        function deleteContact(contactId) {
+            var success = remove(contactId);
+            if (success) {
+                render();
+            }
+        }
+        form === null || form === void 0 ? void 0 : form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            var name = document.getElementById("name").value;
+            var phone = document.getElementById("phone").value;
+            var email = document.getElementById("email").value;
+            var label = document.getElementById("label")
+                .value;
+            addContact(name, phone, email, label);
+            render();
+            form.reset();
+        });
+        render();
+    </script>
+</body>
+</html>
