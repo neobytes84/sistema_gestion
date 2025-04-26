@@ -3,7 +3,7 @@
 La aplicación de libro de contacto en TypeScript tiene como objetivo crear un sistema organizado para gestionar y almacenar información de contacto. Esta herramienta permite a los usuarios que se agregan, editar y establecer contactos, asegurar un acceso fácil 
 a los datos personales, al tiempo que se proyecta una experiencia simplificada y fácil de usar para gestionar los contactos de la manera de la realidad. 
 
-* Autor: Neobytes
+* Autor: Neobytes84
 * Project_URL: https://github.com/neobytes84/sistema_gestion
 * 
 ## Finalidad del proyecto
